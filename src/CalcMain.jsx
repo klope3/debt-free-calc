@@ -61,11 +61,12 @@ class CalcMain extends React.Component {
         };
         let {principal, interestRate} = this.state;
         let interestPaid = (interestRate * 0.01 / 12) * principal;
+        let principalPayment = newPayment.amount - interestPaid;
         this.setState(state => ({
-            principal: principal - interestPaid,
+            principal: principal - principalPayment,
             payments: [...state.payments, newPayment],
             paymentField: 0,
-        }));
+        }), () => this.validatePaymentField());
     };
 
     render() {
