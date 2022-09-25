@@ -14,25 +14,32 @@ class CalcMain extends React.Component {
     }
 
     changePrincipal = event => {
-        console.log(this.state.payments);
         let {principal, payments} = this.state;
         let valToSet = payments.length === 0 ? event.target.value : principal;
-        this.setState({ principal: valToSet });
+        this.setState({ principal: valToSet }, () => this.validatePaymentField());
     };
-    changeInterestRate = event => this.setState({ interestRate: event.target.value });
+    changeInterestRate = event => {
+        this.setState({ interestRate: event.target.value }, () => this.validatePaymentField());
+    };
     changePaymentAmount = event => {
         let valFromUser = event.target.value;
-        let {principal, interestRate} = this.state;
-        console.log("Sending " + principal + ", " + interestRate);
+        this.setState({paymentField: valFromUser}, () => this.validatePaymentField());
+    };
+    validatePaymentField = () => {
+        let {principal, interestRate, paymentField} = this.state;
+        let valToSet = this.clampPaymentToMinimum(principal, interestRate, paymentField);
+        this.setState({ paymentField: valToSet });
+    };
+    clampPaymentToMinimum = (principal, interestRate, paymentAmount) => {
         let minPayment = this.calcMinimumPayment(principal, interestRate);
         let {principalPaid, interestPaid} = minPayment;
-        let minPaymentTotal = (principalPaid + interestPaid).toFixed(2);
-        let valToSet = valFromUser >= minPaymentTotal ? valFromUser : minPaymentTotal;
-        this.setState({ paymentField: valToSet });
+        let minPaymentTotal = principalPaid * 1 + interestPaid * 1;
+        let clampedVal = paymentAmount >= minPaymentTotal ? paymentAmount : minPaymentTotal;
+        return clampedVal;
     };
     calcMinimumPayment = (principal, interestRate) => ({
         interestPaid: (interestRate * 0.01 / 12) * principal,
-        principalPaid: principal > 100 ? principal * 0.01 : principal,
+        principalPaid: principal > 100 ? principal * 0.01 : principal * 1,
     });
     calcMonthsToRepayment = (principal) => {
         let curPrincipal = principal;
@@ -64,8 +71,10 @@ class CalcMain extends React.Component {
     render() {
         let { principal, interestRate, paymentField } = this.state;
         const monthsToZero = this.calcMonthsToRepayment(principal, interestRate);
+        paymentField *= 1;
+        const paymentRounded = paymentField.toFixed(2);
         principal *= 1;
-        const roundedBalance = principal > 0 ? principal.toFixed(2) : 0;
+        const balanceRounded = principal > 0 ? principal.toFixed(2) : 0;
 
         return (
             <div>
@@ -77,10 +86,10 @@ class CalcMain extends React.Component {
                     <input onChange={this.changeInterestRate} type="number" id="interest-rate" /><span>%</span>
                 </form>
                 <label htmlFor="payment-field">Make A Payment:</label>
-                <input type="number" id="payment-field" value={paymentField} onChange={this.changePaymentAmount} />
+                <input type="number" id="payment-field" value={paymentRounded} onChange={this.changePaymentAmount} />
                 <button onClick={this.makePayment}>Make Payment</button>
                 <p></p>
-                <p>Balance: {roundedBalance}</p>
+                <p>Balance: {balanceRounded}</p>
                 <p>Months to pay off: {monthsToZero}</p>
                 <CalcPayHistory payments={this.state.payments} />
             </div>
