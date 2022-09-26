@@ -13,6 +13,10 @@ class CalcMain extends React.Component {
         }
     }
 
+    changePaymentAmount = event => this.setState({paymentField: event.target.value});
+    calcInterestPayment = () => (this.state.interestRate * 0.01 / 12) * this.state.principal;
+    isPaymentValid = () => this.state.paymentField >= this.calcMinPaymentTotal(); 
+    isPrincipalValid = () => this.state.payments.length > 0 || this.state.principal <= 999999;
     changePrincipal = event => {
         let {principal, payments} = this.state;
         let valToSet = payments.length === 0 ? event.target.value : principal;
@@ -21,24 +25,6 @@ class CalcMain extends React.Component {
     changeInterestRate = event => {
         this.setState({ interestRate: event.target.value });
     };
-    changePaymentAmount = event => this.setState({paymentField: event.target.value});
-    //validatePaymentField = () => {
-    //    let {principal, interestRate, paymentField} = this.state;
-    //    let valToSet = this.clampPaymentToMinimum(principal, interestRate, paymentField);
-    //    this.setState({ paymentField: valToSet });
-    //};
-    //clampPaymentToMinimum = (principal, interestRate, paymentAmount) => {
-    //    let minPayment = this.calcMinimumPayment(principal, interestRate);
-    //    let {principalPaid, interestPaid} = minPayment;
-    //    let minPaymentTotal = principalPaid * 1 + interestPaid * 1;
-    //    let clampedVal = paymentAmount >= minPaymentTotal ? paymentAmount : minPaymentTotal;
-    //    return clampedVal;
-    //};
-    //calcMinimumPayment = (principal, interestRate) => ({
-    //    interestPaid: (interestRate * 0.01 / 12) * principal,
-    //    principalPaid: principal > 100 ? principal * 0.01 : principal * 1,
-    //});
-    calcInterestPayment = () => (this.state.interestRate * 0.01 / 12) * this.state.principal; 
     calcMinPrincipalPayment = () => {
         let {principal} = this.state;
         let payment = principal > 100 ? principal * 0.01 : principal * 1;
@@ -50,10 +36,6 @@ class CalcMain extends React.Component {
         return (interest + principal).toFixed(2) * 1;
     }
     setMinPayment = () => {
-        //let {principal, interestRate} = this.state;
-        //let minPayment = this.calcMinimumPayment(principal, interestRate);
-        //let {interestPaid, principalPaid} = minPayment;
-        //let paymentRounded = (interestPaid + principalPaid).toFixed(2);
         this.setState({paymentField: this.calcMinPaymentTotal()});
     };
     calcMonthsToRepayment = (principal) => {
@@ -69,42 +51,38 @@ class CalcMain extends React.Component {
         if (safety === 999) { return "(Principal too high)"; }
         return totalMonths;
     };
-    isPaymentValid = () => {
-        //let {principal, interestRate} = this.state;
-        //let minPayment = this.calcMinimumPayment(principal, interestRate);
-        //let {interestPaid, principalPaid} = minPayment;
-        //let minPaymentTotal = (interestPaid + principalPaid).toFixed(2);
-        return (this.state.paymentField >= this.calcMinPaymentTotal());
-    };
     makePayment = () => {
         if (!this.isPaymentValid()) { return; }
+        let {principal, paymentField} = this.state;
         const newPayment = {
             id: Date.now(),
-            amount: this.state.paymentField,
+            amount: paymentField,
         };
         let interestToPay = this.calcInterestPayment();
         let principalPayment = newPayment.amount - interestToPay;
-        let prevPrincipal = this.state.principal;
-        this.setState(state => ({
+        let prevPrincipal = principal;
+        this.setState(prevState => ({
             principal: prevPrincipal - principalPayment,
-            payments: [...state.payments, newPayment],
+            payments: [...prevState.payments, newPayment],
             paymentField: 0,
         }));
     };
 
     render() {
-        let { principal, interestRate, paymentField } = this.state;
+        let { principal, interestRate, paymentField, payments } = this.state;
         const monthsToZero = this.calcMonthsToRepayment(principal, interestRate);
         principal *= 1;
         const balanceRounded = principal > 0 ? principal.toFixed(2) : 0;
-        const paymentValidMsg = this.isPaymentValid() ? "" : `The minimum payment is ${this.calcMinPaymentTotal()}.`;
+        const principalInvalidMsg = this.isPrincipalValid() ? "" : `The maximum principal is $999,999.00.`;
+        const paymentInvalidMsg = this.isPaymentValid() ? "" : `The minimum payment is ${this.calcMinPaymentTotal()}.`;
+        const principalFieldDisabled = payments.length > 0;
 
         return (
             <div>
                 <h1>Debt-Free Calculator</h1>
                 <form>
                     <label htmlFor="principal">Principal:</label>
-                    <input onChange={this.changePrincipal} type="number" id="principal" />
+                    <input onChange={this.changePrincipal} type="number" id="principal" disabled={principalFieldDisabled} />
                     <label htmlFor="interest-rate">Interest Rate:</label>
                     <input onChange={this.changeInterestRate} type="number" id="interest-rate" /><span>%</span>
                 </form>
@@ -112,10 +90,11 @@ class CalcMain extends React.Component {
                 <input type="number" id="payment-field" value={paymentField} onChange={this.changePaymentAmount} />
                 <button onClick={this.makePayment}>Make Payment</button>
                 <button onClick={this.setMinPayment}>Set Minimum Payment</button>
-                <p>{paymentValidMsg}</p>
+                <p>{principalInvalidMsg}</p>
+                <p>{paymentInvalidMsg}</p>
                 <p>Balance: {balanceRounded}</p>
                 <p>Months to pay off: {monthsToZero}</p>
-                <CalcPayHistory payments={this.state.payments} />
+                <CalcPayHistory payments={payments} />
             </div>
         )
     }
