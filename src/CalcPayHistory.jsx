@@ -3,7 +3,10 @@ import React from "react";
 class CalcPayHistory extends React.Component {
     render() {
         const { payments } = this.props;
-        const listItems = payments.map(item => (<li key={item.id}>{item.amount.toFixed(2)}</li>));
+        const listItems = payments.map(item => {
+            let value = (item.amount * 1).toFixed(2)
+            return (<li key={item.id}>{value}</li>)
+        });
         return (
             <ul>
                 {listItems}
