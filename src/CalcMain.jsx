@@ -17,8 +17,8 @@ class CalcMain extends React.Component {
     changePaymentAmount = event => this.setState({paymentField: event.target.value * 1});
     calcInterestPayment = () => (this.state.interestRate * 0.01 / 12) * this.state.principal;
     isPaymentValid = () => {
-        let {principal, paymentField} = this.state;
-        return paymentField <= principal && paymentField > 0 && paymentField >= this.calcMinPaymentTotal()
+        let {principal, interestRate, paymentField} = this.state;
+        return interestRate >= 0 && paymentField <= principal && paymentField > 0 && paymentField >= this.calcMinPaymentTotal()
     }; 
     isPrincipalValid = () => this.state.payments.length > 0 || this.state.principal <= 999999;
     changePrincipal = event => {
@@ -82,8 +82,9 @@ class CalcMain extends React.Component {
         const minPayment = this.calcMinPaymentTotal();
         const balanceRounded = principal > 0 ? principal.toFixed(2) : 0;
         const principalInvalidMsg = this.isPrincipalValid() ? "" : `The maximum principal is $999,999.00.`;
-        let paymentInvalidMsg = paymentValid || minPayment === 0 ? "" : `The minimum payment is ${minPayment}.`;
+        let paymentInvalidMsg = paymentValid || minPayment === 0 || interestRate < 0 ? "" : `The minimum payment is ${minPayment}.`;
         if (principal > 0 && paymentField > principal) { paymentInvalidMsg = "You can't pay more than the current balance."; }
+        const interestInvalidMsg = interestRate >= 0 ? "" : "The interest rate needs to be at least 0%.";
         const principalFieldDisabled = payments.length > 0;
         const topDataStrings = !isNaN(years) && monthsToZero > 0 ? [years, "years", monthRemainder, "months"] : ["--"];
         const botDataStrings = [`$${balanceRounded}`];
@@ -103,7 +104,7 @@ class CalcMain extends React.Component {
                         <CalcInputArea 
                             idPrefix="interest" 
                             labelText="Interest Rate" 
-                            invalidMessage="" 
+                            invalidMessage={interestInvalidMsg} 
                             showButton={false}
                             changeFunction={this.changeInterestRate} />
                         <CalcInputArea 
