@@ -26,12 +26,16 @@ h1 {
   display: flex;
   justify-content: center;
   overflow: hidden;
+  height: 400px;
 }
 
 .calc-sub-container {
   padding: 20px;
   width: 50%;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 label,
@@ -41,25 +45,56 @@ span {
   text-align: left;
 }
 
+input {
+  height: 46px;
+  font-size: 1.5rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+button {
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+#min-payment-button {
+  height: 45px;
+}
+
 #payment-field {
   display: inline;
+  flex: 3;
 }
 
 .input-container {
   margin: 15px 0px;
+  position: relative;
+}
+
+.input-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
 
 #right-side {
   background: rgb(232, 232, 232);
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
 }
 
 #right-side span {
   display: inline;
   text-align: center;
+}
+
+.invalid-message {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+#pay-button {
+  flex: 1;
 }
 
 .time-number {
