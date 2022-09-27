@@ -4,13 +4,25 @@ class CalcPayHistory extends React.Component {
     render() {
         const { payments } = this.props;
         const listItems = payments.map(item => {
-            let value = (item.amount * 1).toFixed(2)
-            return (<li key={item.id}>{value}</li>)
+            let {date, amount, balance} = item;
+            
+            return (<li key={item.id} className="payment-history-row">
+                <div>{`${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`}</div>
+                <div>{`$${amount.toFixed(2)}`}</div>
+                <div>{`$${balance.toFixed(2)}`}</div>
+            </li>)
         });
         return (
-            <ul>
-                {listItems}
-            </ul>
+            <div className="payment-history-container">
+                <div className="payment-history-row" id="payment-table-header">
+                    <div>Date</div>
+                    <div>Amount</div>
+                    <div>Balance</div>
+                </div>
+                <ul>
+                    {listItems}
+                </ul>
+            </div>
         )
     }
 }
