@@ -82,7 +82,7 @@ class CalcMain extends React.Component {
         const minPayment = this.calcMinPaymentTotal();
         const balanceRounded = principal > 0 ? principal.toFixed(2) : 0;
         const principalInvalidMsg = this.isPrincipalValid() ? "" : `The maximum principal is $999,999.00.`;
-        let paymentInvalidMsg = paymentValid || minPayment === 0 || interestRate < 0 ? "" : `The minimum payment is ${minPayment}.`;
+        let paymentInvalidMsg = paymentValid || minPayment === 0 || interestRate < 0 ? "" : `The minimum payment is $${minPayment}.`;
         if (principal > 0 && paymentField > principal) { paymentInvalidMsg = "You can't pay more than the current balance."; }
         const interestInvalidMsg = interestRate >= 0 ? "" : "The interest rate needs to be at least 0%.";
         const principalFieldDisabled = payments.length > 0;
@@ -97,6 +97,7 @@ class CalcMain extends React.Component {
                         <CalcInputArea 
                             idPrefix="principal" 
                             labelText="Principal" 
+                            innerTextLeft="$"
                             invalidMessage={principalInvalidMsg} 
                             showButton={false} 
                             changeFunction={this.changePrincipal}
@@ -104,6 +105,7 @@ class CalcMain extends React.Component {
                         <CalcInputArea 
                             idPrefix="interest" 
                             labelText="Interest Rate" 
+                            innerTextRight="%"
                             invalidMessage={interestInvalidMsg} 
                             showButton={false}
                             changeFunction={this.changeInterestRate} />
@@ -111,8 +113,11 @@ class CalcMain extends React.Component {
                             idPrefix="payment" 
                             labelText="Amount To Pay"
                             fieldValue={paymentField} 
+                            innerTextLeft="$"
                             invalidMessage={paymentInvalidMsg} 
                             showButton={true}
+                            buttonText="Pay Now"
+                            buttonId="pay-button"
                             disableButton={!paymentValid}
                             buttonId="pay-button"
                             changeFunction={this.changePaymentAmount}
