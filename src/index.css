@@ -1,20 +1,25 @@
-/* body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */
-
-
 h1 {
   text-align: center;
+}
+
+label,
+input,
+span {
+  display: block;
+  text-align: left;
+}
+
+input {
+  height: 46px;
+  font-size: 1.5rem;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 20px;
+}
+
+button {
+  border-radius: 5px;
+  border: 1px solid gray;
 }
 
 .calc-container {
@@ -39,33 +44,14 @@ h1 {
   position: relative;
 }
 
-label,
-input,
-span {
-  display: block;
-  text-align: left;
+#right-side {
+  background: rgb(232, 232, 232);
+  text-align: center;
 }
 
-input {
-  height: 46px;
-  font-size: 1.5rem;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 20px;
-}
-
-button {
-  border-radius: 5px;
-  border: 1px solid gray;
-}
-
-#min-payment-button {
-  height: 45px;
-}
-
-#payment-field {
+#right-side span {
   display: inline;
-  flex: 3;
+  text-align: center;
 }
 
 .input-container {
@@ -93,14 +79,13 @@ button {
   right: 6px;
 }
 
-#right-side {
-  background: rgb(232, 232, 232);
-  text-align: center;
+#min-payment-button {
+  height: 45px;
 }
 
-#right-side span {
+#payment-field {
   display: inline;
-  text-align: center;
+  flex: 3;
 }
 
 .invalid-message {
@@ -170,14 +155,13 @@ button {
 .progress-bar-background,
 .progress-bar-percent {
   border-radius: 100px;
-  /* position: absolute; */
 }
 
 .progress-bar {
   left: 7px;
   top: 5px;
   bottom: 5px;
-  background: rgb(0, 145, 255);
+  background: rgb(103, 189, 255);
   position: absolute;
 }
 

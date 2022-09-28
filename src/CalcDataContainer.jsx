@@ -7,7 +7,12 @@ class CalcDataContainer extends React.Component {
         return (
             <div className="right-side-data-container">
                 <div>{labelText}</div>
-                <div><span className={bigStringClassName}>{string1}</span> {string2} <span className={bigStringClassName}>{string3}</span> {string4}</div>
+                <div>
+                    <span className={bigStringClassName}>{string1}</span> 
+                    {string2} 
+                    <span className={bigStringClassName}>{string3}</span> 
+                    {string4}
+                </div>
             </div>
         )
     }
