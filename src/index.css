@@ -36,6 +36,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  position: relative;
 }
 
 label,
@@ -152,6 +153,47 @@ button {
 .payment-history-row div:nth-child(1),
 .payment-history-row div:nth-last-child(1) {
   width: 100px;
+}
+
+.progress-bar-container {
+  position: absolute;
+  bottom: 55px;
+  left: 40px;
+  right: 40px;
+}
+
+.progress-bar,
+.progress-bar-background,
+.progress-bar-percent {
+  border-radius: 100px;
+  /* position: absolute; */
+}
+
+.progress-bar {
+  left: 7px;
+  top: 5px;
+  bottom: 5px;
+  background: rgb(0, 145, 255);
+  position: absolute;
+}
+
+.progress-bar-background {
+  left: 40px;
+  right: 40px;
+  height: 20px;
+  background: white;
+}
+
+.progress-bar-percent {
+  z-index: 1;
+  position: relative;
+}
+
+.progress-message {
+  position: absolute;
+  text-align: center;
+  left: 0;
+  right: 0;
 }
 
 @media screen and (max-width: 720px) {

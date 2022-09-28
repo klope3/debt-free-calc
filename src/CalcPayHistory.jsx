@@ -8,8 +8,8 @@ class CalcPayHistory extends React.Component {
             
             return (<li key={item.id} className="payment-history-row">
                 <div>{`${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`}</div>
-                <div>{`$${amount.toFixed(2)}`}</div>
-                <div>{`$${balance.toFixed(2)}`}</div>
+                <div>{`$${amount}`}</div>
+                <div>{`$${balance}`}</div>
             </li>)
         });
         return (
