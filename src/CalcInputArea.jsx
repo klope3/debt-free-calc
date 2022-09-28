@@ -2,7 +2,21 @@ import React from "react";
 
 class CalcInputArea extends React.Component {
     render() {
-        let {idPrefix, labelText, fieldValue, innerTextLeft, innerTextRight, invalidMessage, showButton, buttonText, buttonId, disableButton, changeFunction, buttonFunction, disableField} = this.props;
+        let {
+            idPrefix, 
+            labelText, 
+            fieldValue, 
+            innerTextLeft, 
+            innerTextRight, 
+            invalidMessage, 
+            showButton, 
+            buttonText, 
+            buttonId, 
+            disableButton, 
+            changeFunction, 
+            buttonFunction, 
+            disableField
+        } = this.props;
         let inputId = `${idPrefix}-field`;
         let button;
         if (showButton) { button = <button onClick={buttonFunction} disabled={disableButton} id={buttonId}>{buttonText}</button> }

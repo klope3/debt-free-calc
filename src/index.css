@@ -113,6 +113,10 @@ button {
   flex: 2;
 }
 
+#interest-field {
+  padding-right: 25px;
+}
+
 .time-number {
   font-size: 2.5rem;
 }
